@@ -18,15 +18,15 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-0">
             <WelcomePage />
-            <div className="max-w-2xl w-full border p-6 rounded-md">
-            <FormProvider>
-            <FormStep/>
-            </FormProvider>
+            <div className="flex justify-center">
+              <div className="max-w-2xl w-full border p-6 rounded-md">
+                <FormProvider>
+                  <FormStep/>
+                </FormProvider>
+              </div>
             </div>
           </div>
         </div>
-        
-        
       </main>
       
     </div>
