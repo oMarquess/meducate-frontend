@@ -3,7 +3,9 @@ import { createContext , Dispatch, ReactNode, SetStateAction, useContext, useSta
 interface TFormData{
     username: string;
     email: string;
-    password: string;
+    educationLevel: string;
+    technicalLevel: string;
+    files: File[]; 
     
 }
 
@@ -22,7 +24,10 @@ const FormContext = createContext<IFormContext>({
     formData: {
          username : "",
          email : "",
-         password: ""
+         educationLevel: "",
+         technicalLevel: "",
+         files: [],
+
     },
     setFormData: () => {}
 });
@@ -38,7 +43,9 @@ export function FormProvider({children}: IProps){
         {
             username : "",
             email : "",
-            password: ""
+            educationLevel: "",
+            technicalLevel: "",
+            files: [],
        },
     );
 

@@ -21,8 +21,8 @@ export function UsernameForm() {
     return (
         <form className="space-y-9" onSubmit={handleSubmit(onHandleFormSubmit)}>
             <div className="flex flex-col gap-4">
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                    Username
+                <label htmlFor="username" className="funnel-display-light block font-medium text-gray-800">
+                   Your full name
                 </label>
                 <input
                     type="text"
