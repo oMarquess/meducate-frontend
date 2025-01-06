@@ -20,8 +20,8 @@ export function EmailForm() {
     return (
         <form className="space-y-9" onSubmit={handleSubmit(onHandleFormSubmit)}>
             <div className="flex flex-col gap-4">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                    Email
+                <label htmlFor="email" className="funnel-display-light block font-medium text-gray-800">
+                   Your Email
                 </label>
                 <input
                     type="email"

@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import { FormProvider } from '@/components/FormContext';
 import { FormStep } from "@/components/FormStep";
 
+
 const Home: React.FC = () => {
 // const [step, setStep] = useState(1);
 
