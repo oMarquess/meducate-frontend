@@ -1,11 +1,12 @@
 import { createContext , Dispatch, ReactNode, SetStateAction, useContext, useState} from "react";
-
+import { InterpretationResponse } from "./Technical";
 interface TFormData{
     username: string;
     email: string;
     educationLevel: string;
     technicalLevel: string;
     files: File[]; 
+    response?: InterpretationResponse;
     
 }
 
