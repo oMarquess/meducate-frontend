@@ -5,6 +5,7 @@ import { useState } from "react";
 import axios from 'axios';
 import { ProgressBar } from './ProgressBar';
 import { API_ENDPOINT } from "@/config";
+import { useRouter, Router } from 'next/router';
 
 type TFormValues = {
        technicalLevel: string;
@@ -115,6 +116,7 @@ export function TechnicalForm() {
     const {register, handleSubmit} = useForm<TFormValues>({
         defaultValues: formData
     });
+    const router = useRouter();
 
     async function onHandleFormSubmit(data:TFormValues) {
         setFormData((prevFormData) => ({...prevFormData, ...data}));
@@ -143,6 +145,12 @@ export function TechnicalForm() {
             console.log('Backend response:', response.data);
             setFormData((prevFormData) => ({...prevFormData, response: response.data}));
             setCreated(true);
+
+            // Navigate to the interpretation page
+            router.push({
+                pathname: '/interpretation',
+                query: { response: JSON.stringify(response.data) },
+            });
         } catch (error) {
             console.error('Error sending data to backend:', error);
             // Handle error state or display error message to the user
@@ -152,51 +160,53 @@ export function TechnicalForm() {
     }
 
     return (
-        isCreated && formData.response ? (
-            <div>
-    
-                <InterpretationResult response={formData.response} />
-            </div>
-        ) : isLoading ? (
-            <div>
-                <h1>Loading...</h1>
-                <ProgressBar />
-            </div>
-        ) : (
-            <form className="space-y-9" onSubmit={handleSubmit(onHandleFormSubmit)}>
-                <div className="flex flex-col gap-4">
-                    <label htmlFor="technicalLevel" className="funnel-display-light block font-medium text-gray-800">
-                        Which of these perfectly describes your background?
-                    </label>
-                    <select
-                        id="technicalLevel"
-                        className="h-11 px-4  pr-8 border rounded-md appearance-none"
-                        {...register("technicalLevel")}
-                        required
-                    >
-                        <option value="">Select your background</option>
-                        <option value="medicalscience">Medical Science</option>
-                        <option value="otherscience">Other Science</option>
-                        <option value="nonscience">Non-Science</option>
-                   
-                    </select>
+        <Router>
+            {isCreated && formData.response ? (
+                <div>
+        
+                    <InterpretationResult response={formData.response} />
                 </div>
-                <div className="flex justify-end gap-4">
-                    <button
-                        type="button"
-                        onClick={onHandleBack}
-                        className="h-11 px-6 bg-black text-white rounded-md"
-                    >
-                        Back
-                    </button>
-                    <button
-                        type="submit"
-                        className="h-11 px-6 bg-black text-white rounded-md"
-                    >
-                       Ok!
-                    </button>
+            ) : isLoading ? (
+                <div>
+                    <h1>Loading...</h1>
+                    <ProgressBar />
                 </div>
-            </form>
-        )
+            ) : (
+                <form className="space-y-9" onSubmit={handleSubmit(onHandleFormSubmit)}>
+                    <div className="flex flex-col gap-4">
+                        <label htmlFor="technicalLevel" className="funnel-display-light block font-medium text-gray-800">
+                            Which of these perfectly describes your background?
+                        </label>
+                        <select
+                            id="technicalLevel"
+                            className="h-11 px-4  pr-8 border rounded-md appearance-none"
+                            {...register("technicalLevel")}
+                            required
+                        >
+                            <option value="">Select your background</option>
+                            <option value="medicalscience">Medical Science</option>
+                            <option value="otherscience">Other Science</option>
+                            <option value="nonscience">Non-Science</option>
+                       
+                        </select>
+                    </div>
+                    <div className="flex justify-end gap-4">
+                        <button
+                            type="button"
+                            onClick={onHandleBack}
+                            className="h-11 px-6 bg-black text-white rounded-md"
+                        >
+                            Back
+                        </button>
+                        <button
+                            type="submit"
+                            className="h-11 px-6 bg-black text-white rounded-md"
+                        >
+                           Ok!
+                        </button>
+                    </div>
+                </form>
+            )}
+        </Router>
     );
 }
