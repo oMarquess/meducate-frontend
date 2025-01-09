@@ -5,7 +5,7 @@ import { useState } from "react";
 import axios from 'axios';
 import { ProgressBar } from './ProgressBar';
 import { API_ENDPOINT } from "@/config";
-import { useRouter, Router } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 type TFormValues = {
        technicalLevel: string;
@@ -30,81 +30,52 @@ export interface InterpretationResponse {
 }
 
 function InterpretationResult({ response }: { response: InterpretationResponse }) {
+    const router = useRouter();
+
+    const handleReturnToHome = () => {
+        router.push('/');
+    };
+
     return (
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div className="px-4 py-5 sm:px-6">
-                <h3 className="text-lg leading-6 font-medium text-gray-900">Interpretation Result</h3>
+        <div className="bg-white shadow-lg rounded-lg p-6 mt-8">
+            <h2 className="text-2xl font-bold mb-4">Interpretation Result</h2>
+            <div className="mb-6">
+                <h3 className="text-xl font-semibold mb-2">Summary</h3>
+                <p className="text-gray-700">{response.interpretation.summary}</p>
             </div>
-            <div className="border-t border-gray-200">
-                <dl>
-                    {/* <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-500">Username</dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{response.user_data.username}</dd>
-                    </div> */}
-                    {/* <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-500">Email</dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{response.user_data.email}</dd>
-                    </div> */}
-                    {/* <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-500">Education Level</dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{response.user_data.education_level}</dd>
-                    </div> */}
-                    {/* <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-500">Technical Level</dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{response.user_data.technical_level}</dd>
-                    </div> */}
-                    <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-500">Files</dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            <ul className="border border-gray-200 rounded-md divide-y divide-gray-200">
-                                {response.files.map((file, index) => (
-                                    <li key={index} className="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                                        <div className="w-0 flex-1 flex items-center">
-                                            <span className="ml-2 flex-1 w-0 truncate">{file}</span>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        </dd>
-                    </div>
-                    <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-500">Summary</dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{response.interpretation.summary}</dd>
-                    </div>
-                    <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-500">Key Findings</dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            <ul className="list-disc pl-5 space-y-1 bg-[#BCE29E] p-4 rounded-md">
-                                {response.interpretation.key_findings.map((finding, index) => (
-                                    <li key={index}>{finding}</li>
-                                ))}
-                            </ul>
-                        </dd>
-                    </div>
-                    <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-500">Recommendations</dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            <ul className="list-disc pl-5 space-y-1">
-                                {response.interpretation.recommendations.map((recommendation, index) => (
-                                    <li key={index}>{recommendation}</li>
-                                ))}
-                            </ul>
-                        </dd>
-                    </div>
-                    <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-500">Medical Terms</dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            <ul className="list-disc pl-5 space-y-1">
-                                {Object.entries(response.interpretation.medical_terms).map(([term, definition], index) => (
-                                    <li key={index}>
-                                        <strong>{term}:</strong> {definition}
-                                    </li>
-                                ))}
-                            </ul>
-                        </dd>
-                    </div>
-                </dl>
+            <div className="mb-6">
+                <h3 className="text-xl font-semibold mb-2">Key Findings</h3>
+                <ul className="list-disc pl-5 space-y-2">
+                    {response.interpretation.key_findings.map((finding, index) => (
+                        <li key={index} className="text-gray-700">{finding}</li>
+                    ))}
+                </ul>
             </div>
+            <div className="mb-6">
+                <h3 className="text-xl font-semibold mb-2">Recommendations</h3>
+                <ul className="list-disc pl-5 space-y-2">
+                    {response.interpretation.recommendations.map((recommendation, index) => (
+                        <li key={index} className="text-gray-700">{recommendation}</li>
+                    ))}
+                </ul>
+            </div>
+            <div>
+                <h3 className="text-xl font-semibold mb-2">Medical Terms</h3>
+                <ul className="list-disc pl-5 space-y-2">
+                    {Object.entries(response.interpretation.medical_terms).map(([term, definition], index) => (
+                        <li key={index} className="text-gray-700">
+                            <span className="font-semibold">{term}:</span> {definition}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+            <button
+                type="button"
+                onClick={handleReturnToHome}
+                className="mt-6 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            >
+                Return to Home
+            </button>
         </div>
     );
 }
@@ -116,7 +87,6 @@ export function TechnicalForm() {
     const {register, handleSubmit} = useForm<TFormValues>({
         defaultValues: formData
     });
-    const router = useRouter();
 
     async function onHandleFormSubmit(data:TFormValues) {
         setFormData((prevFormData) => ({...prevFormData, ...data}));
@@ -145,12 +115,6 @@ export function TechnicalForm() {
             console.log('Backend response:', response.data);
             setFormData((prevFormData) => ({...prevFormData, response: response.data}));
             setCreated(true);
-
-            // Navigate to the interpretation page
-            router.push({
-                pathname: '/interpretation',
-                query: { response: JSON.stringify(response.data) },
-            });
         } catch (error) {
             console.error('Error sending data to backend:', error);
             // Handle error state or display error message to the user
@@ -160,53 +124,50 @@ export function TechnicalForm() {
     }
 
     return (
-        <Router>
-            {isCreated && formData.response ? (
-                <div>
-        
-                    <InterpretationResult response={formData.response} />
+        isCreated && formData.response ? (
+            <div>
+                <InterpretationResult response={formData.response} />
+            </div>
+        ) : isLoading ? (
+            <div>
+                <h1>Loading...</h1>
+                <ProgressBar />
+            </div>
+        ) : (
+            <form className="space-y-9" onSubmit={handleSubmit(onHandleFormSubmit)}>
+                <div className="flex flex-col gap-4">
+                    <label htmlFor="technicalLevel" className="funnel-display-light block font-medium text-gray-800">
+                        Which of these perfectly describes your background?
+                    </label>
+                    <select
+                        id="technicalLevel"
+                        className="h-11 px-4  pr-8 border rounded-md appearance-none"
+                        {...register("technicalLevel")}
+                        required
+                    >
+                        <option value="">Select your background</option>
+                        <option value="medicalscience">Medical Science</option>
+                        <option value="otherscience">Other Science</option>
+                        <option value="nonscience">Non-Science</option>
+                   
+                    </select>
                 </div>
-            ) : isLoading ? (
-                <div>
-                    <h1>Loading...</h1>
-                    <ProgressBar />
+                <div className="flex justify-end gap-4">
+                    <button
+                        type="button"
+                        onClick={onHandleBack}
+                        className="h-11 px-6 bg-black text-white rounded-md"
+                    >
+                        Back
+                    </button>
+                    <button
+                        type="submit"
+                        className="h-11 px-6 bg-black text-white rounded-md"
+                    >
+                       Ok!
+                    </button>
                 </div>
-            ) : (
-                <form className="space-y-9" onSubmit={handleSubmit(onHandleFormSubmit)}>
-                    <div className="flex flex-col gap-4">
-                        <label htmlFor="technicalLevel" className="funnel-display-light block font-medium text-gray-800">
-                            Which of these perfectly describes your background?
-                        </label>
-                        <select
-                            id="technicalLevel"
-                            className="h-11 px-4  pr-8 border rounded-md appearance-none"
-                            {...register("technicalLevel")}
-                            required
-                        >
-                            <option value="">Select your background</option>
-                            <option value="medicalscience">Medical Science</option>
-                            <option value="otherscience">Other Science</option>
-                            <option value="nonscience">Non-Science</option>
-                       
-                        </select>
-                    </div>
-                    <div className="flex justify-end gap-4">
-                        <button
-                            type="button"
-                            onClick={onHandleBack}
-                            className="h-11 px-6 bg-black text-white rounded-md"
-                        >
-                            Back
-                        </button>
-                        <button
-                            type="submit"
-                            className="h-11 px-6 bg-black text-white rounded-md"
-                        >
-                           Ok!
-                        </button>
-                    </div>
-                </form>
-            )}
-        </Router>
+            </form>
+        )
     );
 }
